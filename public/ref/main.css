@@ -1,0 +1,40 @@
+p {
+    font-size: 20px;
+    line-height: 120%;
+}
+.Page {
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial;
+    background-color: #00a0ff;
+}
+.User {
+    text-align: center;
+    margin: 50px auto 50px;
+    box-shadow: 0px 0px 30px 5px #666666;
+    background-color: #ffffff;
+}
+.Img {
+    margin: 0px;
+    border: 0px;
+}
+.Section {
+    width: auto;
+    margin: 30px auto 0;
+}
+.Content {
+    width: auto;
+    margin: 0 auto 10px;
+}
+.FloatImg {
+    margin: 10px auto 10px;
+    border: 15px solid #ffffff;
+    box-shadow: 0px 0px 3px 3px #bbbbbb;
+
+}
+.Declaration {
+    text-align: center;
+    margin: 0px auto 100px;
+    padding: 0px;
+    color: #ffffff;
+}

@@ -5,27 +5,66 @@ a {
     text-decoration: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+#auth-msg {
+    margin: 1px;
+    padding: 0 1vw 1vw;
+}
+#logs {
+    height: 12vh;
+    padding: 0 1vw 0.5vw;
+    margin: 0 1vw 1vw;
+    border: 1px solid #000000;
+    overflow-y: auto;
+}
+#auth-alert {
+    margin: 0;
+    color: #ff0000;
+    font-size: 1.2vw;
+    padding: 0 1px 2px;
+}
+#auth-code {
+    width: 78%;
+    font-size: 2vw;
+    line-height: 120%;
+    padding: 1%;
+}
+#auth-submit {
+    width: 78%;
+    text-align: center;
+    font-size: 2vw;
+    line-height: 120%;
+    margin: 2vw auto 0;
+    padding: 1%;
+    border: 1px solid #000000;
+    background-color: #0090ff;
+    color: #ffffff;
+}
 .Page {
     margin: 0;
     padding: 0;
     font-family: sans-serif, Microsoft YaHei, Arial;
     background-color: #00a0ff;
 }
+.User {
+    text-align: center;
+    width: 50vw;
+    margin: 15vh auto 15vh;
+    padding: 5%;
+    box-shadow: 0 0 30px 5px #666666;
+    background-color: #ffffff;
+}
 .crl {
     height: 60vh;
-}
-.log {
-    height: 15vh;
 }
 .left {
     float: left;
     width: 35%;
-    margin: 10% auto 0 10%;
+    margin: 5% auto 0 10%;
 }
 .right {
     float: right;
     width: 35%;
-    margin: 10% 10% 0 auto;
+    margin: 5% 10% 0 auto;
 }
 .button {
     line-height: 8vw;
@@ -37,6 +76,11 @@ a {
 }
 .button:active {
     background-color: #eeeeee;
+}
+.log-p {
+    margin: 0;
+    font-size: 3vw;
+    line-height: 120%;
 }
 .PageBreak {
     width: 100%;
