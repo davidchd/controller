@@ -1,28 +1,40 @@
 // require tools
-var express = require("express");
-var fs = require("fs");
-var bodyParser = require("body-parser");
-var cookieParser = require("cookie-parser");
+var express = require('express');
+var fs = require('fs');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var ejs = require('ejs');
 
 // declare variables
-const seed = "IhapoAPaaiX";
+const seed = 'IhapoAPaaiX';
+var inCode;
 
 // init
 var app = express();
-var inCode;
-fs.readFile(__dirname + "\\map.json", function(err, data) {
+fs.readFile(__dirname + '\\map.json', function(err, data) {
     var tem = JSON.parse(data);
     inCode = tem.in;
     // console.log(authCode)
 });
+app.engine(".html", ejs.__express);
+app.set('views', './template');
+app.set('view engine', 'html');
 app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser());
 app.use(session({
-    name: "davidchdCRL",
+    name: 'davidchdCRL',
     secret: seed
 }));
+
+app.get('/', function(req, res) {
+    res.render('index')
+});
+
+app.get('/auth', function(req, res) {
+    res.render('auth')
+});
 
 // authorize device
 app.post('/auth', function(req, res) {
