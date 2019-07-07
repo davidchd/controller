@@ -1,7 +1,8 @@
-/*
+/**
  * File name: main.js
- * Created by Haodong Chen
- * All rights reserved.
+ * Created by Haodong Chen on July 4, 2019
+ * davidchd@outlook.com
+ * All right reserved.
  */
 
 $(document).ready(function() {
@@ -9,15 +10,22 @@ $(document).ready(function() {
     let auth = {
         isAuth: false,
         msg: $("#auth-msg"),
-        ref: function() {
+        ref: () => {
             $.post("/auth", {"action":0}, function(data) {
                 console.log(data);
                 if(data.code === 0) {
                     // auth.isAuth = true;
                     auth.isAuth = data.valid;
-                    auth.msg.html(auth.isAuth ? "<p class=\"log-p\" style=\"color: #9acd32;\">Device Authorized, all features are enabled.</p>" : "<p class=\"log-p\" style=\"color: #ff6000;\">Device Unauthorized, click <a href=\"authorize.html\" style=\"color: #ff6000; text-decoration: underline;\">here</a> to authorize.</p>")
+                    if(auth.isAuth) {
+                        auth.msg.html('Device Authorized, all features are enabled');
+                        auth.msg.css('color', '#9acd32');
+                    } else {
+                        auth.msg.html('Device Unauthorized, please <a href="/auth" style="color: #ff6000; text-decoration: underline;">authorize</a>.');
+                        auth.msg.css('color', '#ff6000');
+                    }
                 } else {
-                    auth.msg.html("<p class=\"log-p\">Unable to check for authorizing status.</p>");
+                    auth.msg.html('Unable to check for authorizing status.');
+                    auth.msg.css('color', 'black');
                 }
             });
             return this.isAuth;
@@ -30,8 +38,6 @@ $(document).ready(function() {
             this.holder.scrollTop(this.holder[0].scrollHeight);
         }
     };
-
-    auth.ref();
 
     $(".button").click(function() {
         if(auth.ref()) {
