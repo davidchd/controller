@@ -17,11 +17,11 @@ $(function() {
                     // auth.isAuth = true;
                     auth.isAuth = data.valid;
                     if(auth.isAuth) {
-                        auth.msg.html('Device Authorized, all features are enabled.');
                         auth.msg.css('color', '#9acd32');
+                        auth.msg.html('Device Authorized, all features are enabled. <small onclick="revoke()" style="color: #ff6000; text-decoration: underline;">REVOKE</small>');
                     } else {
-                        auth.msg.html('Device Unauthorized, please <a href="/auth" style="color: #ff6000; text-decoration: underline;">authorize</a>.');
                         auth.msg.css('color', '#ff6000');
+                        auth.msg.html('Device Unauthorized, please <a href="/authorize" style="color: #ff6000; text-decoration: underline;">authorize</a>.');
                     }
                 } else {
                     auth.msg.html('Unable to check for authorizing status.');
@@ -49,6 +49,19 @@ $(function() {
         } else {
             logs.add('No action is permitted before authorizing the device.');
         }
+    });
+
+    var revoke = function() {
+        auth.msg.css('color', '#ff6000');
+        auth.msg.html('Cancel the authorization of this device? ' +
+                      '<a id="revokeY" href="javascript:void(0);" style="color: #ff6000; text-decoration: underline;">Confirm</a> ' +
+                      '<a id="revokeN" href="javascript:void(0);" style="color: #ff6000; text-decoration: underline;">No</a>');
+    }
+    $('#revokeY').click(function() {
+        //
+    });
+    $('#revokeN').click(function() {
+        //
     });
 
 });

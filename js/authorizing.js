@@ -1,6 +1,6 @@
 /**
- * File name: test.js
- * Created by Haodong Chen on July 4, 2019
+ * File name: authorizing.js
+ * Created by Haodong Chen on July 8, 2019
  * davidchd@outlook.com
  * All right reserved.
  */
@@ -12,7 +12,7 @@ $(function() {
         $.post('/auth', {'action':1,'authCode':input.val()}, function(data) {
             if(data.code === 0) {
                 if(data.valid === true) {
-                    alert.html('');
+                    $(location).attr('href', '/authorize?t=0');
                 } else {
                     alert.html('Invalid Authorization Code');
                 }

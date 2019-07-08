@@ -16,10 +16,15 @@ const uglify = require('uglify-js');
 const {Wechaty} = require('wechaty');
 const qr = require('qr-image');
 
-// declare variables
+// declare variables and functions
 const seed = 'IhapoAPaaiX';
 let inCode;
 var qrcodeURL = '';
+function miniCode(filename, funcs = null) {
+    const code = uglify.minify(fs.readFileSync('./js/' + filename + '.js','utf8'), {compress:{unused:false},mangle:false});
+    console.log('Minifying ' + filename + '.js error: ' + code.error);
+    return code.code;
+}
 
 /**
  * initializing process
@@ -49,44 +54,47 @@ const bot = new Wechaty({profile:'control-bot'});
  */
 // root front end
 app.get('/', (req, res) => {
-    const indexJS = uglify.minify(fs.readFileSync('./js/main.js','utf8'));
     res.render('index', req.session.valid ? {
         color: '#9acd32',
-        msg: 'Device Authorized, all features are enabled.',
-        code: indexJS
+        msg: 'Device Authorized, all features are enabled. <a id="revoke" href="javascript:void(0);" style="color: #ff6000; text-decoration: underline;">REVOKE</a>',
+        code: miniCode('main', )
     } : {
         color: '#ff6000',
-        msg: 'Device Unauthorized, please <a href="/auth" style="color: #ff6000; text-decoration: underline;">authorize</a>.',
-        code: indexJS.code
+        msg: 'Device Unauthorized, please <a href="/authorize" style="color: #ff6000; text-decoration: underline;">authorize</a>.',
+        code: miniCode('main', )
     });
 });
 // auth front end
-app.get('/auth', (req, res) => {
-    const authJS = uglify.minify(fs.readFileSync('./js/auth.js', 'utf8'));
+app.get('/authorize', (req, res) => {
     res.render('widget', req.session.valid ? {
-        content: '',
-        code: ''
+        title: 'Authorization',
+        content: '<p id="auth-alert">\n' +
+                 '    <b>You have successfully authorized this device.</b><br />\n' +
+                 '    You will be redirect to the control panel in <b id="num"></b>.\n' +
+                 '</p>',
+        code: miniCode('authorized')
     } : {
+        title: 'Authorization',
         content: '<p id="auth-alert"></p>\n' +
                  '<input id="auth-code" type="password" placeholder="Authorization Code" />\n' +
                  '<a href="javascript:void(0);">\n' +
                  '    <p id="auth-submit">AUTHORIZE THIS DEVICE</p>\n' +
                  '</a>',
-        code: authJS.code
+        code: miniCode('authorizing')
     });
 });
+// front end test
 app.get('/test', (req, res) => {
-    const testJS = uglify.minify(fs.readFileSync('./js/test.js','utf8'));
     res.render('test', {
-        code: testJS.code
+        code: miniCode('test')
     });
 });
 // wechat front end
 app.get('/wechat', (req, res) => {
-    const wechatJS = uglify.minify(fs.readFileSync('./js/wechat.js','utf8'));
     res.render('widget', {
+        title: 'WeChat Login',
         content: '<img id="img" src="/wechatQR?t=0" width="100%" />',
-        code: wechatJS.code
+        code: miniCode('wechat')
     });
 });
 // generate wechat login qr code
@@ -99,10 +107,10 @@ app.get('/wechatQR', (req, res) => {
 app.post('/auth', (req, res) => {
     switch(req.body.action) {
         case '1':
-            let authCode = req.body.authCode;
-            let now = new Date();
-            let validate = (now.getMonth() + 1) + '/' + now.getDate() + ', ' +
-                now.getFullYear() + ' davidchd AUTH ';
+            const authCode = req.body.authCode;
+            const now = new Date();
+            // let validate = (now.getMonth() + 1) + '/' + now.getDate() + ', ' + now.getFullYear() + ' davidchd AUTH ';
+            const validate = '  ';
             if(authCode === validate) {
                 req.session.valid = true;
             }

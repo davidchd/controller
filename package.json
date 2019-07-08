@@ -17,7 +17,6 @@
     "express": "~4.16.1",
     "express-session": "^1.16.2",
     "fs": "0.0.1-security",
-    "gulp-uglify": "^3.0.2",
     "qr-image": "^3.2.0",
     "uglify-js": "^3.6.0",
     "wechaty": "^0.26.1"

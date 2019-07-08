@@ -6,8 +6,13 @@
  */
 
 $(function() {
-    var img = $("#img");
-    setInterval(function() {
-        img.attr('src', '/wechatQR?t=' + new Date().getTime())
-    }, 10 * 1000);
+    var img = {
+        obj: $('#img'),
+        ref: function() {
+            console.log('ref');
+            img.obj.attr('src', '/wechatQR?t=' + new Date().getTime());
+        }
+    };
+    img.obj.click(img.ref);
+    setInterval(img.ref, 5 * 1000);
 });
