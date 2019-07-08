@@ -59,12 +59,12 @@ a {
 .left {
     float: left;
     width: 35%;
-    margin: 5% auto 0 10%;
+    margin: 10% auto 0 10%;
 }
 .right {
     float: right;
     width: 35%;
-    margin: 5% 10% 0 auto;
+    margin: 10% 10% 0 auto;
 }
 .button {
     line-height: 8vw;

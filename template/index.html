@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>Controller</title>
         <script src="jquery-341-min.js"></script>
-        <script src="main.js"></script>
+        <script><%- code %></script>
         <link href="main.css" rel="stylesheet" type="text/css"/>
     </head>
     <body class="Page" ontouchstart="">
@@ -32,8 +32,7 @@
         <div>
             <hr class="PageBreak" />
             <p id="auth-msg" class="log-p" style="color: <%= color %>;">
-                <%= msg %>
-                <a href="/auth" style="color: #ff6000; text-decoration: underline;"><%= link %></a>.
+                <%- msg %>
             </p>
             <div id="logs"></div>
         </div>

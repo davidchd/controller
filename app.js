@@ -1,4 +1,5 @@
 /**
+ * File name: app.js
  * Created by Haodong Chen on July 4, 2019
  * davidchd@outlook.com
  * All right reserved.
@@ -11,6 +12,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const ejs = require('ejs');
+const uglify = require('uglify-js');
 const {Wechaty} = require('wechaty');
 const qr = require('qr-image');
 
@@ -28,9 +30,8 @@ const app = express();
 fs.readFile('./map.json', (err, data) => {
     var tem = JSON.parse(data);
     inCode = tem.in;
-    // console.log(authCode)
 });
-app.engine(".html", ejs.__express);
+app.engine('.html', ejs.__express);
 app.set('views', './template');
 app.set('view engine', 'html');
 app.use(express.static('./public'));
@@ -47,33 +48,55 @@ const bot = new Wechaty({profile:'control-bot'});
  * define listener methods
  */
 // root front end
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
+    const indexJS = uglify.minify(fs.readFileSync('./js/main.js','utf8'));
     res.render('index', req.session.valid ? {
         color: '#9acd32',
-        msg: 'Device Authorized, all features are enabled',
-        link: ''
+        msg: 'Device Authorized, all features are enabled.',
+        code: indexJS
     } : {
         color: '#ff6000',
-        msg: 'Device Unauthorized, please ',
-        link: 'authorize'
+        msg: 'Device Unauthorized, please <a href="/auth" style="color: #ff6000; text-decoration: underline;">authorize</a>.',
+        code: indexJS.code
     });
 });
 // auth front end
-app.get('/auth', function(req, res) {
-    res.render('auth')
+app.get('/auth', (req, res) => {
+    const authJS = uglify.minify(fs.readFileSync('./js/auth.js', 'utf8'));
+    res.render('widget', req.session.valid ? {
+        content: '',
+        code: ''
+    } : {
+        content: '<p id="auth-alert"></p>\n' +
+                 '<input id="auth-code" type="password" placeholder="Authorization Code" />\n' +
+                 '<a href="javascript:void(0);">\n' +
+                 '    <p id="auth-submit">AUTHORIZE THIS DEVICE</p>\n' +
+                 '</a>',
+        code: authJS.code
+    });
+});
+app.get('/test', (req, res) => {
+    const testJS = uglify.minify(fs.readFileSync('./js/test.js','utf8'));
+    res.render('test', {
+        code: testJS.code
+    });
 });
 // wechat front end
-app.get('/wechat', function(req, res) {
-    res.render('tem');
+app.get('/wechat', (req, res) => {
+    const wechatJS = uglify.minify(fs.readFileSync('./js/wechat.js','utf8'));
+    res.render('widget', {
+        content: '<img id="img" src="/wechatQR?t=0" width="100%" />',
+        code: wechatJS.code
+    });
 });
 // generate wechat login qr code
 app.get('/wechatQR', (req, res) => {
-    const img = qr.image(qrcodeURL);
+    const img = qr.image(qrcodeURL, {size:20,margin:1});
     res.writeHead(200, {'Content-Type': 'image/png'});
     img.pipe(res);
 });
 // authorize device
-app.post('/auth', function(req, res) {
+app.post('/auth', (req, res) => {
     switch(req.body.action) {
         case '1':
             let authCode = req.body.authCode;
@@ -97,7 +120,7 @@ app.post('/auth', function(req, res) {
     }
 });
 // control
-app.post('/crl', function(req,res) {
+app.post('/crl', (req,res) => {
     if(req.session.valid) {
         // process req
     } else {

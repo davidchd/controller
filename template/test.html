@@ -4,10 +4,16 @@
         <meta charset="UTF-8">
         <title>Authorization</title>
         <link href="main.css" rel="stylesheet" type="text/css"/>
+        <script src="jquery-341-min.js"></script>
+        <script><%- code %></script>
     </head>
     <body class="Page">
         <div class="User">
-            <img src="/wechatQR" width="80%" />
+            <p id="auth-alert"></p>
+            <input id="auth-code" type="password" placeholder="Authorization Code" />
+            <a href="javascript:void(0);">
+                <p id="auth-submit">AUTHORIZE THIS DEVICE</p>
+            </a>
         </div>
         <div>
             <hr class="PageBreak" />
