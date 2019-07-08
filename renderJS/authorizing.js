@@ -6,7 +6,7 @@
  */
 
 $(function() {
-    var alert = $('#auth-alert');
+    var alert = $('.auth-alert');
     var input = $('#auth-code');
     $('#auth-submit').click(function() {
         $.post('/auth', {'action':1,'authCode':input.val()}, function(data) {
