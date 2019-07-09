@@ -10,7 +10,6 @@ const server = require('./app-server');
 
 // require wechat bot
 const {Wechaty} = require('wechaty');
-const qr = require('qr-image');
 
 /**
  * initializing process
@@ -42,7 +41,8 @@ bot.on('message', (msg) => {
         // real action here
     } else {
         if(msg.type() === bot.Message.Type.Text && msg.text().substr(0,1) === '#') {
-            console.log(msg.text().substring(1));
+            const command = msg.text().substring(1);
+
         }
     }
 });

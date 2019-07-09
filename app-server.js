@@ -6,19 +6,24 @@
  */
 
 // require tools
+const bodyParser = require('body-parser');
+const crypto = require('crypto');
+const ejs = require('ejs');
 const express = require('express');
 const fs = require('fs');
-const bodyParser = require('body-parser');
+const qr = require('qr-image');
 const session = require('express-session');
-const ejs = require('ejs');
 const uglify = require('uglify-js');
 
 // declare variables and supported functions
 const seed = 'IhapoAPaaiX';
 let inCode, server;
 var qrcodeURL = '';
-function miniCode(filename, funcs = null) {
-    const code = uglify.minify(fs.readFileSync('./renderJS/' + filename + '.js','utf8'));
+function loadContent(filepath) {
+    return fs.readFileSync('./renderHTML/' + filepath, 'utf8');
+}
+function miniCode(filename) {
+    const code = uglify.minify(fs.readFileSync('./renderJS/' + filename, 'utf8'));
     if(code.error !== undefined) {
         console.log('Minifying ' + filename + '.js error: ' + code.error);
     }
@@ -52,31 +57,20 @@ function setup() {
     // index front end
     server.get('/', (req, res) => {
         res.render('index', {
-            msg:
-                'Checking for authorization status...',
-            code: miniCode('main', )
+            msg: 'Checking for authorization status...',
+            code: miniCode('main.js')
         });
     });
     // auth front end
     server.get('/authorize', (req, res) => {
         res.render('widget', req.session.valid ? {
             title: 'Authorization',
-            content:
-                '<p class="auth-alert">\n' +
-                '    <b>You have successfully authorized this device.</b><br />\n' +
-                '    You will be redirect to the control panel in <b id="num"></b>.<br />\n' +
-                '</p>' +
-                '<a class="auth-alert" href="/">redirect now</a>',
-            code: miniCode('authorized')
+            content: loadContent('widget/AuthDone.html'),
+            code: miniCode('AuthDone.js')
         } : {
             title: 'Authorization',
-            content:
-                '<p class="auth-alert"></p>\n' +
-                '<input id="auth-code" type="password" placeholder="Authorization Code" />\n' +
-                '<a style="text-decoration: none;" href="javascript:void(0);">\n' +
-                '    <p id="auth-submit">AUTHORIZE THIS DEVICE</p>\n' +
-                '</a>',
-            code: miniCode('authorizing')
+            content: loadContent('widget/Authorizing.html'),
+            code: miniCode('Authorizing.js')
         });
     });
     // front end test
@@ -100,14 +94,17 @@ function setup() {
         img.pipe(res);
     });
     // authorize device
-    server.post('/auth', (req, res) => {
+    server.post('/authorize', (req, res) => {
         switch(req.body.action) {
             case '1':
                 const authCode = req.body.authCode;
                 // const now = new Date();
                 // const validate = (now.getMonth() + 1) + '/' + now.getDate() + ', ' + now.getFullYear() + ' davidchd AUTH ';
-                const validate = '  ';
-                if(authCode === validate) {
+                const validate = 'f3676996c0108b14ed10144c282183cb';
+                const encryption = crypto.createHash('md5WithRSAEncryption')
+                                         .update(seed + authCode + 'OwO!')
+                                         .digest('hex');
+                if(encryption === validate) {
                     req.session.valid = true;
                 }
             case '0':
