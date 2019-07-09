@@ -15,11 +15,13 @@ const uglify = require('uglify-js');
 
 // declare variables and supported functions
 const seed = 'IhapoAPaaiX';
-let inCode, app;
+let inCode, server;
 var qrcodeURL = '';
 function miniCode(filename, funcs = null) {
-    const code = uglify.minify(fs.readFileSync('./renderJS/' + filename + '.js','utf8'), {compress:{unused:false},mangle:false});
-    console.log('Minifying ' + filename + '.js error: ' + code.error);
+    const code = uglify.minify(fs.readFileSync('./renderJS/' + filename + '.js','utf8'));
+    if(code.error !== undefined) {
+        console.log('Minifying ' + filename + '.js error: ' + code.error);
+    }
     return code.code;
 }
 
@@ -31,13 +33,13 @@ function init() {
         const tem = JSON.parse(data);
         inCode = tem.in;
     });
-    app = express();
-    app.engine('.html', ejs.__express);
-    app.set('views', './renderHTML');
-    app.set('view engine', 'html');
-    app.use(express.static('./public'));
-    app.use(bodyParser.urlencoded({extended:true}));
-    app.use(session({
+    server = express();
+    server.engine('.html', ejs.__express);
+    server.set('views', './renderHTML');
+    server.set('view engine', 'html');
+    server.use(express.static('./public'));
+    server.use(bodyParser.urlencoded({extended:true}));
+    server.use(session({
         name: 'davidchdCRL',
         secret: seed
     }));
@@ -48,7 +50,7 @@ function init() {
  */
 function setup() {
     // index front end
-    app.get('/', (req, res) => {
+    server.get('/', (req, res) => {
         res.render('index', {
             msg:
                 'Checking for authorization status...',
@@ -56,7 +58,7 @@ function setup() {
         });
     });
     // auth front end
-    app.get('/authorize', (req, res) => {
+    server.get('/authorize', (req, res) => {
         res.render('widget', req.session.valid ? {
             title: 'Authorization',
             content:
@@ -78,13 +80,13 @@ function setup() {
         });
     });
     // front end test
-    app.get('/test', (req, res) => {
+    server.get('/test', (req, res) => {
         res.render('test', {
             code: miniCode('test')
         });
     });
     // wechat front end
-    app.get('/wechat', (req, res) => {
+    server.get('/wechat', (req, res) => {
         res.render('widget', {
             title: 'WeChat Login',
             content: '<img id="img" src="/wechatQR?t=0" width="100%" />',
@@ -92,13 +94,13 @@ function setup() {
         });
     });
     // generate wechat login qr code
-    app.get('/wechatQR', (req, res) => {
+    server.get('/wechatQR', (req, res) => {
         const img = qr.image(qrcodeURL, {size:20,margin:1});
         res.writeHead(200, {'Content-Type': 'image/png'});
         img.pipe(res);
     });
     // authorize device
-    app.post('/auth', (req, res) => {
+    server.post('/auth', (req, res) => {
         switch(req.body.action) {
             case '1':
                 const authCode = req.body.authCode;
@@ -125,7 +127,7 @@ function setup() {
         }
     });
     // RESERVED control interface
-    app.post('/crl', (req,res) => {
+    server.post('/crl', (req,res) => {
         if(req.session.valid) {
             // process req
         } else {
@@ -138,11 +140,12 @@ function setup() {
  * start server
  */
 function start(port = 3000) {
-    app.listen(port);
+    server.listen(port);
 }
 
 module.exports = {
     values: {
+        server: server,
         qrcodeURL: qrcodeURL
     },
     init: init,

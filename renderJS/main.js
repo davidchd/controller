@@ -32,7 +32,7 @@ $(function() {
                             $('#revokeY').click(function() {
                                 $.post('/auth', {'action':2}, function(data) {
                                     if(data.code === 0) {
-                                        $(location).attr('href', '/?t=0');
+                                        auth.ref();
                                     }
                                 });
                             });
