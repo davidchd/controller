@@ -40,7 +40,7 @@ bot.on('message', (msg) => {
     if(!msg.self()) {
         // real action here
     } else {
-        if(msg.type() === bot.Message.Type.Text && msg.text().substr(0,1) === '#') {
+        if(msg.type() === bot.Message.Type.Text && msg.text().trim().substr(0,1) === '》') {
             const command = msg.text().substring(1);
 
         }

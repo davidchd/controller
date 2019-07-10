@@ -1,9 +1,9 @@
 {
   "name": "controller",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "run/app.js",
   "scripts": {
-    "start": "node ./app.js"
+    "start": "node run/app.js"
   },
   "keywords": [],
   "author": "David Chen",

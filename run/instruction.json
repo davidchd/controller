@@ -17,8 +17,19 @@
         }
     },
     "structure": {
-        "type": [],
-        "status": {},
-        "switch": {}
+        "device": {
+            "type": "",
+            "online": "",
+            "switch": {},
+            "features": {}
+        },
+        "type": ["sensor", "outlet", "light", "camera", "other"],
+        "online": [true, false],
+        "switch": {"function":[true, false]},
+        "features": {
+            "function-1": {},
+            "function-2": {},
+            "...": "..."
+        }
     }
 }

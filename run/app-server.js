@@ -1,6 +1,6 @@
 /**
- * File name: -server.js
- * Created by Haodong Chen on July 4, 2019
+ * File name: app-server.js
+ * Created by Haodong Chen on July 8, 2019
  * davidchd@outlook.com
  * All right reserved.
  */
@@ -25,7 +25,7 @@ function loadContent(filepath) {
 function miniCode(filename) {
     const code = uglify.minify(fs.readFileSync('./renderJS/' + filename, 'utf8'));
     if(code.error !== undefined) {
-        console.log('Minifying ' + filename + '.js error: ' + code.error);
+        console.log('Minifying ' + filename + ' error: ' + code.error);
     }
     return code.code;
 }
@@ -34,7 +34,7 @@ function miniCode(filename) {
  * init server
  */
 function init() {
-    fs.readFile('./map.json', (err, data) => {
+    fs.readFile('./run/map.json', (err, data) => {
         const tem = JSON.parse(data);
         inCode = tem.in;
     });
