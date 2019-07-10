@@ -4,30 +4,48 @@
  * davidchd@outlook.com
  * All right reserved.
  */
-const keywords = {
-    cmd: [],
-    obj: ['天气', '灯', '空调', '', '', '', ''],
-    cmdSplit: ['再', '并且', '并', '然后', '还有', '也'],
-    objSplit: ['和', '还有', '跟', '、', '，', '']
+
+const _cmd = {
+    original: '',
+    phrases: []
 };
 
-function parse(str) {
-    if(str === undefined || str.trim() === ''){
-        return {code:-1};
-    }
-    // change to array
-    const result = {
-        code: 0,
-        cmd: '',
-        obj: ''
-    };
+const _keywords = {
+    cmd: [],
+    obj: ['天气', '灯', '空调'],
+    cmdSplit: ['再', '并且', '并', '然后', '还有', '也'],
+    objSplit: ['和', '还有', '跟', '、', '，'],
+    before: ['帮我', '帮忙', '记得'],
+    after: ['了吧', '了啦', '好了', '了', '吧', '喽', '嘛', '啦']
+};
 
-    if(str.substr(0,1) === '把') {
-        //
+class CMDparser {
+
+    constructor(str) {
+        this.str = str;
+        this.init();
     }
-    return result;
+
+    test() {
+        return cmd.original;
+    }
+
+    init() {
+        if(this.str === undefined || this.str.trim() === ''){
+            this.code = -1;
+        } else {
+            const phrases = [];
+        }
+    }
+
+    split() {
+
+    }
+
+    removePre(str) {
+
+    }
+
 }
 
-module.exports = {
-    parse: parse
-};
+module.exports = CMDparser;

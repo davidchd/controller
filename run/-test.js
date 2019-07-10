@@ -4,8 +4,10 @@
  * davidchd@outlook.com
  * All right reserved.
  */
-const cmdParser = require('./command-parser');
+const CMDParser = require('./command-parser');
 
 console.log();
-console.log('你好吗'.length);
+kk = new CMDParser('kk');
+jj = new CMDParser('jjj');
+console.log(jj);
 // console.log(cmdParser.parse('heiheihei'));
