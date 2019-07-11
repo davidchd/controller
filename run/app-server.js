@@ -101,9 +101,10 @@ function setup() {
                 // const now = new Date();
                 // const validate = (now.getMonth() + 1) + '/' + now.getDate() + ', ' + now.getFullYear() + ' davidchd AUTH ';
                 const validate = 'f3676996c0108b14ed10144c282183cb';
-                const encryption = crypto.createHash('md5WithRSAEncryption')
-                                         .update(seed + authCode + 'OwO!')
-                                         .digest('hex');
+                const encryption = crypto
+                        .createHash('md5WithRSAEncryption')
+                        .update(seed + authCode + 'OwO!')
+                        .digest('hex');
                 if(encryption === validate) {
                     req.session.valid = true;
                 }
