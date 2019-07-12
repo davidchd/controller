@@ -4,7 +4,8 @@
  * davidchd@outlook.com
  * All right reserved.
  */
-const CMDParser = require('./run/command-parser');
+const CMDParser = require('./support/support');
+const parser2 = require('./support/support');
 
 // test1();
 test2();
@@ -19,10 +20,17 @@ function test1() {
 }
 
 function test2() {
-    const t = new CMDParser('帮我查一下天气 然后把窗帘和灯都打开 再设个下午三点的闹钟页 就可以了');
-    console.log(t);
+    const m = CMDParser.understand('帮我查一下天气 然后把空调和灯都打开 再设个下午三点的闹钟页 就可以了');
+    // for(var outputIdx = 0; outputIdx < t.output.length; outputIdx ++) {
+    //     if(! t.output[outputIdx].unable) {
+    //         console.log('Command number ' + (outputIdx + 1) + ':', t.output[outputIdx]);
+    //     } else {
+    //         console.log('Command number ' + (outputIdx + 1) + ': "', t.output[outputIdx].origins, '" unable to parse. ')
+    //     }
+    // }
+    const n = parser2.understand('你说我好看吗');
+    console.log(m);
 }
 
 function test3() {
-    console.log(undefined === undefined);
 }

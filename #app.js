@@ -1,12 +1,15 @@
 /**
- * File name: app.js
+ * File name: #app.js
  * Created by Haodong Chen on July 4, 2019
  * davidchd@outlook.com
  * All right reserved.
  */
 
 // require server
-const server = require('./app-server');
+const server = require('./run/app-server');
+
+// require support
+const support = require('./support/support');
 
 // require wechat bot
 const {Wechaty} = require('wechaty');
@@ -41,8 +44,8 @@ bot.on('message', (msg) => {
         // real action here
     } else {
         if(msg.type() === bot.Message.Type.Text && msg.text().trim().charAt(0) === '》') {
-            const command = msg.text().substring(1);
-
+            const cmd = support.understand(msg.text().substring(1));
+            /////////
         }
     }
 });
