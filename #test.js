@@ -20,7 +20,7 @@ function test1() {
 }
 
 function test2() {
-    const m = CMDParser.understand('帮我查一下天气 然后把空调和灯都打开 再设个下午三点的闹钟页 就可以了');
+    const m = CMDParser.understand('帮我查一下天气 然后把空调和灯都打开 再设个下午三点的闹钟页 下午三点把空调和灯关上 就可以了');
     // for(var outputIdx = 0; outputIdx < t.output.length; outputIdx ++) {
     //     if(! t.output[outputIdx].unable) {
     //         console.log('Command number ' + (outputIdx + 1) + ':', t.output[outputIdx]);

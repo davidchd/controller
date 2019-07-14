@@ -38,7 +38,7 @@ function understand(str) {
 function init() {
     splitCMD();
     for(const i in strs) {
-        strs[i] = util.removeSuf(util.removePre(strs[i], _keywords.pre), _keywords.suf);
+        strs[i] = removePreSuf(strs[i]);
         result.output[i] = {origins:strs[i]};
     }
 }
@@ -69,11 +69,13 @@ function parse() {
  * for recursion purpose
  */
 function splitCMD(cmd = result.str) {
-    let strIdx;
+    cmd = removePreSuf(cmd);
+    let strIdx, beg, end;
     for(const splitter of _keywords.cmdSplitter) {
         strIdx = cmd.indexOf(splitter);
         if(strIdx >= 0) {
-            const beg = cmd.substring(0, strIdx), end = cmd.substring(strIdx + splitter.length);
+            beg = cmd.substr(0, strIdx);
+            end = cmd.substring(strIdx + splitter.length);
             if(splitCMD(beg)) {
                 strs.push(beg.trim());
             }
@@ -83,14 +85,26 @@ function splitCMD(cmd = result.str) {
             return false;
         }
     }
+    if(cmd.exist(_keywords.actions) > 1 && cmd.exist(' ') === 1) {
+        beg = cmd.substr(0, cmd.indexOf(' '));
+        end = cmd.substring(cmd.indexOf(' ') + 1);
+        if(splitCMD(beg)) {
+            strs.push(beg.trim());
+        }
+        if(splitCMD(end)) {
+            strs.push(end.trim());
+        }
+        return false;
+    }
     return true;
 }
 
 /**
  * @return boolean
- * true when parse completed
+ * true when extracting completed
  */
 function checkOBJ(i) {
+    strs[i] = removePreSuf(strs[i]);
     const objNames = util.toArr(_keywords.obj, 'name');
     const occurence = strs[i].exist(objNames);
     if(occurence === 0 || strs[i].trim().length === 0) {
@@ -151,7 +165,7 @@ function checkOBJ(i) {
  * undefined for unknown
  *
  * @return boolean
- * true when parse completed
+ * true when splitting completed
  */
 function splitOBJ(i, normal) {
     result.output[i].obj = [];
@@ -191,13 +205,21 @@ function splitOBJ(i, normal) {
             }
             return true;
         default:
-            //
-            break;
+            console.log('To be finished :- split objects in the middle');
+            return false;
     }
 }
 
+/**
+ * @param i
+ * index of elements in strs
+ *
+ * @return boolean
+ * true when extracting completed
+ */
 function checkACT(i) {
-    if(strs[i].trim().length === 0) {
+    strs[i] = removePreSuf(strs[i]);
+    if(strs[i].trim().length === 0 || strs[i].exist(_keywords.actions) !== 1) {
         return false;
     }
     strs[i] = util.removeBoth(strs[i], _keywords.mid);
@@ -216,6 +238,10 @@ function checkACT(i) {
         }
     }
     return false;
+}
+
+function removePreSuf(e) {
+    return util.removeSuf(util.removePre(e, _keywords.pre), _keywords.suf);
 }
 
 let result;

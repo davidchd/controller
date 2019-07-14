@@ -15,11 +15,19 @@ module.exports = {
 /**
  * prototype function
  */
-String.prototype.exist = function(arr) {
+String.prototype.exist = function(e) {
     var count = 0;
-    for(const obj of arr) {
-        if(this.indexOf(obj) >= 0) {
-            count += 1;
+    if(typeof e === 'string') {
+        if(e.length > 0 && this.indexOf(e) >= 0) {
+            count += 1 + this.substring(this.indexOf(e) + e.length).exist(e);
+        }
+    } else {
+        for (const obj in e) {
+            if (e[obj] instanceof Array) {
+                count += ~~(this.exist(e[obj]) > 0);
+            } else if (this.indexOf(e[obj]) >= 0) {
+                count += 1;
+            }
         }
     }
     return count;
@@ -55,6 +63,7 @@ function removeBoth(str, arr) {
  * remove prefix of a given string
  */
 function removePre(str, arr) {
+    str = str.trim();
     let impurity = true;
     while(str !== '' && impurity) {
         impurity = false;
@@ -72,6 +81,7 @@ function removePre(str, arr) {
  * remove suffix of a given string
  */
 function removeSuf(str, arr) {
+    str = str.trim();
     let impurity = true, strIdx;
     while(str !== '' && impurity) {
         impurity = false;
