@@ -76,7 +76,7 @@ function setup() {
     // front end test
     server.get('/test', (req, res) => {
         res.render('test', {
-            code: miniCode('test')
+            code: miniCode('test.js')
         });
     });
     // wechat front end
@@ -84,7 +84,7 @@ function setup() {
         res.render('widget', {
             title: 'WeChat Login',
             content: '<img id="img" src="/wechatQR?t=0" width="100%" />',
-            code: miniCode('wechat')
+            code: miniCode('wechat.js')
         });
     });
     // generate wechat login qr code

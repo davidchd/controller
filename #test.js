@@ -28,7 +28,7 @@ function test2() {
     //         console.log('Command number ' + (outputIdx + 1) + ': "', t.output[outputIdx].origins, '" unable to parse. ')
     //     }
     // }
-    const n = parser2.understand('你说我好看吗');
+    const n = parser2.understand('帮我开个灯');
     console.log(m);
 }
 

@@ -16,14 +16,15 @@ const util = require('./util');
  */
 function understand(str) {
     result = {};
+    strs = [];
     result.valid =
         (str === undefined || str.trim() === '' ? false :
             str.exist(util.toArr(_keywords.obj, 'name')) > 0
         );
-    result.legal = str.search(/^[A-Za-z0-9 ]$/) < 0;
+    result.legal = str.search(/[A-Za-z0-9 ]/) < 0;
     if(result.valid) {
         result.str = str;
-        result.strs = strs; // for debugging ONLY
+        // result.strs = strs; // for debugging ONLY
         result.output = [];
         init();
         parse();
@@ -37,6 +38,9 @@ function understand(str) {
  */
 function init() {
     splitCMD();
+    if(strs.length === 0) {
+        strs.push(result.str);
+    }
     for(const i in strs) {
         strs[i] = removePreSuf(strs[i]);
         result.output[i] = {origins:strs[i]};
@@ -245,10 +249,10 @@ function removePreSuf(e) {
 }
 
 let result;
-const strs = [];
+let strs = [];
 
 const _keywords = {
-    cmdSplitter: ['，然后再', '，然后', '然后', '，之后再', '，之后', '之后再', '之后', '，对了', '对了', '，再', '再', '并且', '并'],
+    cmdSplitter: ['，然后再', '，之后再', '，然后', '，之后', '之后再', '然后', '之后', '，对了', '对了', '并且', '，再', '再', '并'],
     objSplitter: ['还有', '和', '跟', '、', '，'],
     pre: ['麻烦', '一下', '帮我', '帮忙', '给我', '劳驾', '记得', '先', '请', '，'],
     suf: ['可不可以', '就可以了', '行不行', '好不好', '就好了', '可以', '行', '好', '了', '吧', '喽', '嘛', '啦'],

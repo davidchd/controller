@@ -15,19 +15,21 @@ const support = require('./support/support');
 const {Wechaty} = require('wechaty');
 
 /**
- * initializing process
- * create express-server and wechat-bot instance
+ * config and run server
  */
-// init server
 server.init();
-// init wechaty
+server.setup();
+server.start();
+
+/**
+ * initialize
+ * create wechat-bot instance
+ */
 const bot = new Wechaty({profile:'control-bot'});
 
 /**
  * setup
  */
-// setup server
-server.setup();
 // setup bot scan
 bot.on('scan', (qrcode) => {
     server.values.qrcodeURL = qrcode;
@@ -45,13 +47,29 @@ bot.on('message', (msg) => {
     } else {
         if(msg.type() === bot.Message.Type.Text && msg.text().trim().charAt(0) === '》') {
             const cmd = support.understand(msg.text().substring(1));
-            /////////
+            console.log(cmd);
+            if(cmd.valid) {
+                let reply1 = '理解到：', reply2 = '\n以下命令未能理解：';
+                let able = 1, unable = 1;
+                for(const i in cmd.output) {
+                    if(cmd.output[i].flag === 'parsed') {
+                        reply1 += '\n' + (able++) + '. ' + cmd.output[i].origins;
+                    } else {
+                        reply2 += '\n' + (unable++) + '. ' + cmd.output[i].origins;
+                    }
+                }
+                bot.say((able === 1 && unable === 1 ? '无法识别指令，换种说法试试？' :(able === 1 ? '' : reply1) + (unable === 1 ? '' : reply2)));
+            } else {
+                bot.say('无法识别指令，换种说法试试？');
+            }
+            if(!cmd.legal) {
+                bot.say('请尽量避免在指令中使用空格或英文字母，这将降低理解速度或导致命令不可理解。')
+            }
         }
     }
 });
 
 /**
- * run
+ * run bot
  */
-server.start();
-// bot.start();
+bot.start();
