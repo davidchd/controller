@@ -19,6 +19,9 @@ const uglify = require('uglify-js');
 const seed = 'IhapoAPaaiX';
 let inCode, server;
 var qrcodeURL = '';
+function renewQR(qrcode) {
+    qrcodeURL = qrcode;
+}
 function loadContent(filepath) {
     return fs.readFileSync('./renderHTML/' + filepath, 'utf8');
 }
@@ -142,10 +145,7 @@ function start(port = 3000) {
 }
 
 module.exports = {
-    values: {
-        server: server,
-        qrcodeURL: qrcodeURL
-    },
+    renewQR: renewQR,
     init: init,
     setup: setup,
     start: start

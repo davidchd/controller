@@ -32,7 +32,7 @@ const bot = new Wechaty({profile:'control-bot'});
  */
 // setup bot scan
 bot.on('scan', (qrcode) => {
-    server.values.qrcodeURL = qrcode;
+    server.renewQR(qrcode);
     console.log('https://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(qrcode));
 });
 // setup bot login
@@ -42,28 +42,28 @@ bot.on('login', (user) => {
 });
 // setup bot handling message
 bot.on('message', (msg) => {
-    if(!msg.self()) {
+    if(msg.self()) {
         // real action here
     } else {
         if(msg.type() === bot.Message.Type.Text && msg.text().trim().charAt(0) === '》') {
             const cmd = support.understand(msg.text().substring(1));
             console.log(cmd);
             if(cmd.valid) {
-                let reply1 = '理解到：', reply2 = '\n以下命令未能理解：';
+                let reply1 = '理解到：\n', reply2 = '以下命令未能理解：\n';
                 let able = 1, unable = 1;
                 for(const i in cmd.output) {
                     if(cmd.output[i].flag === 'parsed') {
-                        reply1 += '\n' + (able++) + '. ' + cmd.output[i].origins;
+                        reply1 += (able++) + '. ' + cmd.output[i].origins + '\n';
                     } else {
-                        reply2 += '\n' + (unable++) + '. ' + cmd.output[i].origins;
+                        reply2 += (unable++) + '. ' + cmd.output[i].origins + '\n';
                     }
                 }
-                bot.say((able === 1 && unable === 1 ? '无法识别指令，换种说法试试？' :(able === 1 ? '' : reply1) + (unable === 1 ? '' : reply2)));
+                msg.say((able === 1 && unable === 1 ? '无法识别指令，换种说法试试？' : (able === 1 ? '' : reply1 + '动作完成\n') + (unable === 1 ? '' : reply2)));
             } else {
-                bot.say('无法识别指令，换种说法试试？');
+                msg.say('无法识别指令，换种说法试试？');
             }
             if(!cmd.legal) {
-                bot.say('请尽量避免在指令中使用空格或英文字母，这将降低理解速度或导致命令不可理解。')
+                msg.say('请尽量避免在指令中使用空格或英文字母，这将降低理解速度或导致命令不可理解。')
             }
         }
     }

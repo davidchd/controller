@@ -284,14 +284,14 @@ const _keywords = {
             name: '闹钟',
             args: []
         },
-        // '': {
-        //     name: '',
-        //     args: []
-        // },
-        // '': {
-        //     name: '',
-        //     args: []
-        // },
+        window: {
+            name: '窗户',
+            args: []
+        },
+        door: {
+            name: '门',
+            args: []
+        },
         // '': {
         //     name: '',
         //     args: []
